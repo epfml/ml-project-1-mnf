@@ -252,6 +252,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 def reg_logistic_regression(y,tx,lambda_,initial_w, max_iters, gamma):
     # init parameters
     losses = []
+    threshold = 1e-8
 
     # build tx
     w=initial_w
