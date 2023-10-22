@@ -205,12 +205,103 @@ def calculate_log_likelihood_gradient(y, tx, w):
 
     return(grad)
 
+################################ Least squares ################################
+
+def least_squares(y, tx):
+    """Calculate the least squares solution.
+       returns mse, and optimal weights.
+
+    Args:
+        y: numpy array of shape (N,), N is the number of samples.
+        tx: numpy array of shape (N,D), D is the number of features.
+
+    Returns:
+        w: optimal weights, numpy array of shape(D,), D is the number of features.
+        mse: scalar.
+
+    >>> least_squares(np.array([0.1,0.2]), np.array([[2.3, 3.2], [1., 0.1]]))
+    (array([ 0.21212121, -0.12121212]), 8.666684749742561e-33)
+    """
+    # ***************************************************
+    # INSERT YOUR CODE HERE
+    # least squares: TODO
+    # returns mse, and optimal weights
+    
+    w = np.linalg.solve((tx.T).dot(tx),(tx.T).dot(y))
+    mse = compute_loss(y,tx,w)                           
+    # ***************************************************
+    return w, mse
 
 
-  
+################################ Features expansion using polynomial regression ################################
+
+def build_poly(x, degree):
+    """polynomial basis functions for input data x, for j=0 up to j=degree.
+
+    Args:
+        x: numpy array of shape (N,), N is the number of samples.
+        degree: integer.
+
+    Returns:
+        poly: numpy array of shape (N,d+1)
+
+    >>> build_poly(np.array([0.0, 1.5]), 2)
+    array([[1.  , 0.  , 0.  ],
+           [1.  , 1.5 , 2.25]])
+    """
+    X = np.zeros((len(x),degree+1))
+    for i in range (0,degree+1):
+        X[:,i] = x**i
+    return X
+
+def polynomial_regression():
+    """Constructing the polynomial basis function expansion of the data,
+    and then running least squares regression."""
+    # define parameters
+    degrees = [1, 3, 7, 12]
+
+    # define the structure of the figure
+    num_row = 2
+    num_col = 2
+    f, axs = plt.subplots(num_row, num_col)
+
+    for ind, degree in enumerate(degrees):
+        data = build_poly(x, degree)
+        weights, mse = least_squares(y,data)
+        rmse = np.sqrt(mse*2)
+        print(
+            "Processing {i}th experiment, degree={d}, rmse={loss}".format(
+                i=ind + 1, d=degree, loss=rmse
+            )
+        )
+
+    
+def train_test_split_demo(x, y, degree, ratio, seed):
+    """polynomial regression with different split ratios and different degrees.
+
+    Returns:
+      x_tr: numpy array
+      x_te: numpy array
+      y_tr: numpy array
+      y_te: numpy array
+      weights: weights from the least squares optimization"""
+    
+    x_tr, x_te, y_tr, y_te = split_data(x, y, ratio, seed)
+    data_train = build_polynomial.build_poly(x_tr, degree)
+    data_test = build_polynomial.build_poly(x_te, degree)
+    weights_tr, mse_tr = least_squares(y_tr,data_train)
+    weights_te, mse_te = least_squares(y_te,data_test)
+    rmse_tr = np.sqrt(mse_tr*2)
+    rmse_te = np.sqrt(mse_te*2)
+    return x_tr, x_te, y_tr, y_te, weights_tr
+    print(
+        "proportion={p}, degree={d}, Training RMSE={tr:.3f}, Testing RMSE={te:.3f}".format(
+            p=ratio, d=degree, tr=rmse_tr, te=rmse_te
+        )
+    )  
 
 
-#logistic regression using classic gradient descent algorithm
+# logistic regression using classic gradient descent algorithm
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
