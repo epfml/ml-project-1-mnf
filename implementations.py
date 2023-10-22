@@ -19,7 +19,6 @@ def compute_gradient(y, tx, w):
     err=y-np.dot(tx,w)
     coef=-(1/N)
     gradient=coef*(np.dot(np.transpose(tx),err))
-    # ***************************************************
     return gradient
 
 
