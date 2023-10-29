@@ -1,1 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/U9FTc9i_)
+Organization of the repository : 
+- /run.pynb : the notebook containing the different steps of the conception of our model.
+- /implementations.py : file containing all the different methods implemented and some used in our model
+- /helpers.py : file (furnished by teachers) containing the functions used to load the data and create submissions for AIcrowd. 
