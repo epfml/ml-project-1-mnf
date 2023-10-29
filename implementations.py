@@ -222,7 +222,7 @@ def build_poly(x, degree):
         poly: numpy array of shape (N,d+1)
     """
     X = np.zeros((len(x),degree+1))
-    for i in range (0,degree+1):
+    for i in range (1,degree+1):
         X[:,i] = x**i
     return X
 
@@ -298,31 +298,3 @@ def reg_logistic_regression(y,tx,lambda_,initial_w, max_iters, gamma):
 
 
 
-def reg_logistic_regression_sgd(y,tx,lambda_,initial_w, max_iters, gamma, batch_size=1):
-    # init parameters
-    losses = []
-    threshold = 1e-8
-
-    # build tx
-    w=initial_w
-
-    # start the logistic regression
-    for iter in range(max_iters):
-        # get loss and update w.
-        #compute the new gradient
-        for minibatch_y, minibatch_tx in batch_iter(y, tx, batch_size, num_batches=1):
-            grad=calculate_log_likelihood_gradient(minibatch_y,minibatch_tx,w) + 2*lambda_*w
-            w=w-gamma*grad
-            loss=calculate_log_likelihood_loss(y,tx,w)
-
-            losses.append(loss)
-        if iter % 100 == 0:
-            print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
-        # converge criterion
-            #losses.append(loss)
-        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
-            break
-        
-    print("loss={l}".format(l=calculate_log_likelihood_loss(y, tx, w)))
-
-    return(w,loss)
